@@ -9,8 +9,9 @@ app.use(express.json());
 
 app.use("/api/perawat", require("./routes/perawatRoutes"));
 app.use("/api/shift", require("./routes/shiftRoutes"));
-app.use("/api/optimasi", require("./routes/optimasiRoutes"));
+app.use("/api/histori", require("./routes/historiRoutes"));
 app.use("/api/jadwal", require("./routes/jadwalRoutes"));
+app.use("/api/optimasi", require("./routes/optimasiRoutes"));
 
 const PORT = process.env.PORT || 5000;
 

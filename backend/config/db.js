@@ -4,7 +4,7 @@ const db = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
-  database: "hungarian_pegawai",
+  database: "hungarian",
   charset: "utf8mb4",
 });
 

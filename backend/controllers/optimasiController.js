@@ -2,18 +2,29 @@ const {
   jalankanOptimasi,
 } = require("../services/optimasiService");
 
-exports.prosesOptimasi = async (req, res) => {
+exports.prosesOptimasi = async (
+  req,
+  res
+) => {
 
   try {
 
-    const hasil = await jalankanOptimasi();
+    // ambil dari body atau query
+    const hari =
+      req.body?.hari ||
+      req.query?.hari;
+
+    const hasil =
+      await jalankanOptimasi(
+        parseInt(hari)
+      );
 
     res.json(hasil);
 
-  } catch (error) {
+  } catch (err) {
 
     res.status(500).json({
-      message: error.message,
+      message: err.message,
     });
 
   }

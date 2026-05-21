@@ -5,167 +5,278 @@ const {
   findAssignment,
 } = require("../algorithms/hungarian");
 
-const jalankanOptimasi = () => {
+const jalankanOptimasi = (hari) => {
 
   return new Promise((resolve, reject) => {
 
-    // =========================
-    // AMBIL DATA PERAWAT
-    // =========================
+    // =====================
+    // VALIDASI HARI
+    // =====================
 
-    db.query("SELECT * FROM perawat", (err, perawat) => {
+    if (hari < 1 || hari > 31) {
 
-      if (err) {
-        return reject(err);
-      }
+      return reject(
+        new Error(
+          "Hari harus antara 1 - 31"
+        )
+      );
 
-      // =========================
-      // AMBIL DATA SHIFT
-      // =========================
+    }
 
-      db.query("SELECT * FROM shift", (err2, shift) => {
+    // =====================
+    // FORMAT TANGGAL
+    // =====================
 
-        if (err2) {
-          return reject(err2);
+    const tanggal =
+      `2025-12-${String(hari).padStart(2, "0")}`;
+
+    // =====================
+    // KOLOM HISTORI
+    // =====================
+
+    let kolomHistori = null;
+
+    if (hari > 1) {
+
+      kolomHistori =
+        `d${String(hari - 1).padStart(2, "0")}`;
+
+    }
+
+    // =====================
+    // QUERY PERAWAT
+    // =====================
+
+    let sqlPerawat = "";
+
+    // HARI PERTAMA
+    if (hari === 1) {
+
+      sqlPerawat = `
+        SELECT
+          p.kode_perawat,
+          p.nama_perawat,
+          'Libur' AS shift_terakhir
+        FROM perawat p
+        ORDER BY p.kode_perawat
+      `;
+
+    }
+
+    // HARI 2+
+    else {
+
+      sqlPerawat = `
+        SELECT
+          p.kode_perawat,
+          p.nama_perawat,
+          h.${kolomHistori} AS shift_terakhir
+        FROM perawat p
+        JOIN histori_shift h
+          ON h.kode_perawat = p.kode_perawat
+        ORDER BY p.kode_perawat
+      `;
+
+    }
+
+    db.query(
+      sqlPerawat,
+      (err, perawat) => {
+
+        if (err) {
+          return reject(err);
         }
 
-        // =========================
-        // BUAT SLOT SHIFT
-        // =========================
+        // =====================
+        // AMBIL SHIFT
+        // =====================
 
-        let slotShift = [];
+        db.query(
+          `
+          SELECT *
+          FROM shift
+          ORDER BY kode_shift
+          `,
+          (err2, shift) => {
 
-        shift.forEach((s) => {
+            if (err2) {
+              return reject(err2);
+            }
 
-          for (let i = 1; i <= s.jumlah_shift; i++) {
-            slotShift.push(s.nama_shift);
-          }
+            // =====================
+            // SLOT SHIFT
+            // =====================
 
-        });
+            const slotShift = [];
 
-        // =========================
-        // BENTUK MATRIX COST
-        // =========================
+            shift.forEach((s) => {
 
-        let matrix = [];
+              for (
+                let i = 0;
+                i < s.jumlah_shift;
+                i++
+              ) {
 
-        perawat.forEach((p) => {
+                slotShift.push({
+                  kode_shift:
+                    s.kode_shift,
 
-          let row = [];
+                  nama_shift:
+                    s.nama_shift,
+                });
 
-          slotShift.forEach((slot) => {
+              }
 
-            const cost = getCost(
-              p.shift_terakhir,
-              slot
+            });
+
+            // =====================
+            // MATRIX COST
+            // =====================
+
+            const matrix = [];
+
+            perawat.forEach((p) => {
+
+              const row = [];
+
+              slotShift.forEach((slot) => {
+
+                const cost = getCost(
+                  p.shift_terakhir,
+                  slot.nama_shift
+                );
+
+                row.push(cost);
+
+              });
+
+              matrix.push({
+                kode_perawat:
+                  p.kode_perawat,
+
+                nama_perawat:
+                  p.nama_perawat,
+
+                costs: row,
+              });
+
+            });
+
+            // =====================
+            // ASSIGNMENT
+            // =====================
+
+            const assignment =
+              findAssignment(matrix);
+
+            const hasil =
+              assignment.map((item) => {
+
+                const slot =
+                  slotShift[item.colIndex];
+
+                const perawatData =
+                  matrix.find(
+                    (p) =>
+                      p.kode_perawat ===
+                      item.kode_perawat
+                  );
+
+                return {
+
+                  kode_perawat:
+                    item.kode_perawat,
+
+                  nama_perawat:
+                    perawatData.nama_perawat,
+
+                  kode_shift:
+                    slot.kode_shift,
+
+                  nama_shift:
+                    slot.nama_shift,
+
+                  cost:
+                    item.cost,
+                };
+
+              });
+
+            // =====================
+            // TOTAL COST
+            // =====================
+
+            const totalCost =
+              hasil.reduce(
+                (sum, item) =>
+                  sum + item.cost,
+                0
+              );
+
+            // =========================
+            // HAPUS JADWAL LAMA
+            // =========================
+
+            const deleteSql = `
+              DELETE FROM jadwal
+              WHERE tanggal = ?
+            `;
+
+            db.query(
+              deleteSql,
+              [tanggal],
+              (deleteErr) => {
+
+                if (deleteErr) {
+                  return reject(deleteErr);
+                }
+
+                // =====================
+                // SIMPAN JADWAL BARU
+                // =====================
+
+                hasil.forEach((item) => {
+
+                  db.query(
+                    `
+                    INSERT INTO jadwal
+                    (
+                      tanggal,
+                      kode_perawat,
+                      kode_shift,
+                      cost
+                    )
+                    VALUES (?, ?, ?, ?)
+                    `,
+                    [
+                      tanggal,
+                      item.kode_perawat,
+                      item.kode_shift,
+                      item.cost,
+                    ]
+                  );
+
+                });
+
+                // =====================
+                // RESPONSE
+                // =====================
+
+                resolve({
+                  hari,
+                  tanggal,
+                  totalCost,
+                  hasil,
+                });
+
+              }
             );
 
-            row.push(cost);
-
-          });
-
-          matrix.push({
-            perawat: p.nama_perawat,
-            costs: row,
-          });
-
-        });
-
-        // =========================
-        // PROSES ASSIGNMENT
-        // =========================
-
-        const assignment = findAssignment(matrix);
-
-        // =========================
-        // HASIL ASSIGNMENT
-        // =========================
-
-        const hasil = assignment.map((a) => ({
-          perawat: a.perawat,
-          shift: slotShift[a.colIndex],
-          cost: a.cost,
-        }));
-
-        // =========================
-        // HITUNG TOTAL COST
-        // =========================
-
-        const totalCost = hasil.reduce(
-          (sum, item) => sum + item.cost,
-          0
+          }
         );
 
-        // =========================
-        // HAPUS JADWAL LAMA
-        // =========================
-
-        db.query("DELETE FROM jadwal", (deleteErr) => {
-
-          if (deleteErr) {
-            return reject(deleteErr);
-          }
-
-          // =========================
-          // SIMPAN JADWAL BARU
-          // =========================
-
-          hasil.forEach((item) => {
-
-            const dataPerawat = perawat.find(
-              (p) => p.nama_perawat === item.perawat
-            );
-
-            // =========================
-            // INSERT JADWAL
-            // =========================
-
-            const insertSql = `
-              INSERT INTO jadwal
-              (tanggal, id_perawat, shift_hasil, cost)
-              VALUES (?, ?, ?, ?)
-            `;
-
-            db.query(insertSql, [
-              new Date(),
-              dataPerawat.id_perawat,
-              item.shift,
-              item.cost,
-            ]);
-
-            // =========================
-            // UPDATE SHIFT TERAKHIR
-            // =========================
-
-            const updateSql = `
-              UPDATE perawat
-              SET shift_terakhir = ?
-              WHERE id_perawat = ?
-            `;
-
-            db.query(updateSql, [
-              item.shift,
-              dataPerawat.id_perawat,
-            ]);
-
-          });
-
-          // =========================
-          // RESPONSE HASIL
-          // =========================
-
-          resolve({
-            slotShift,
-            matrix,
-            hasil,
-            totalCost,
-          });
-
-        });
-
-      });
-
-    });
+      }
+    );
 
   });
 

@@ -1,63 +1,50 @@
-function getCost(shiftTerakhir, shiftTujuan) {
+function getCost(shiftAwal, shiftTujuan) {
 
-  // rotasi ideal
   if (
-    (shiftTerakhir === "Pagi" && shiftTujuan === "Sore") ||
-    (shiftTerakhir === "Sore" && shiftTujuan === "Malam") ||
-    (shiftTerakhir === "Malam" && shiftTujuan === "Libur") ||
-    (shiftTerakhir === "Libur" && shiftTujuan === "Pagi")
+    (shiftAwal === "P" && shiftTujuan === "Pagi") ||
+    (shiftAwal === "S" && shiftTujuan === "Sore") ||
+    (shiftAwal === "M" && shiftTujuan === "Malam") ||
+    (shiftAwal === "L" && shiftTujuan === "Libur")
   ) {
     return 1;
   }
 
-  // shift sama
-  if (shiftTerakhir === shiftTujuan) {
-    return 3;
-  }
-
-  // larangan
-  if (shiftTerakhir === "Malam" && shiftTujuan === "Pagi") {
-    return 99;
-  }
-
-  // selain itu
-  return 7;
+  return 5;
 }
 
 function findAssignment(matrix) {
 
   let usedCols = [];
-  let results = [];
+  let hasil = [];
 
-  matrix.forEach((rowData) => {
+  matrix.forEach((row) => {
 
     let minCost = Infinity;
     let selectedCol = -1;
 
-    rowData.costs.forEach((cost, colIndex) => {
+    row.costs.forEach((cost, index) => {
 
-      if (!usedCols.includes(colIndex)) {
-
-        if (cost < minCost) {
-          minCost = cost;
-          selectedCol = colIndex;
-        }
-
+      if (
+        !usedCols.includes(index) &&
+        cost < minCost
+      ) {
+        minCost = cost;
+        selectedCol = index;
       }
 
     });
 
     usedCols.push(selectedCol);
 
-    results.push({
-      perawat: rowData.perawat,
+    hasil.push({
+      kode_perawat: row.kode_perawat,
       colIndex: selectedCol,
       cost: minCost,
     });
 
   });
 
-  return results;
+  return hasil;
 }
 
 module.exports = {

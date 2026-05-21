@@ -1,50 +1,66 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+
+import Sidebar from "./components/Sidebar";
 
 import Dashboard from "./pages/Dashboard";
 import Perawat from "./pages/Perawat";
 import Shift from "./pages/Shift";
+import Histori from "./pages/Histori";
 import Optimasi from "./pages/Optimasi";
-import Jadwal from "./pages/jadwal";
 
 function App() {
-
   return (
-    <BrowserRouter>
+    <div
+      style={{
+        display: "flex",
+        background: "#f3f4f6",
+      }}
+    >
+      <Sidebar />
 
-      <Routes>
+      {/* Content */}
+      <div
+        style={{
+          flex: 1,
+          marginLeft: "270px",
+          minHeight: "100vh",
+        }}
+      >
 
-        <Route
-          path="/"
-          element={<Dashboard />}
-        />
+        <div
+          style={{
+            padding: "20px",
+          }}
+        >
+          <Routes>
+            <Route
+              path="/"
+              element={<Dashboard />}
+            />
 
-        <Route
-          path="/perawat"
-          element={<Perawat />}
-        />
+            <Route
+              path="/perawat"
+              element={<Perawat />}
+            />
 
-        <Route
-          path="/shift"
-          element={<Shift />}
-        />
+            <Route
+              path="/shift"
+              element={<Shift />}
+            />
 
-        <Route
-          path="/optimasi"
-          element={<Optimasi />}
-        />
+            <Route
+              path="/histori"
+              element={<Histori />}
+            />
 
-        <Route
-          path="/jadwal"
-          element={<Jadwal />}
-        />
-
-      </Routes>
-
-    </BrowserRouter>
+            <Route
+              path="/optimasi"
+              element={<Optimasi />}
+            />
+          </Routes>
+        </div>
+      </div>
+    </div>
   );
 }
 
