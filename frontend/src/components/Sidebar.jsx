@@ -87,7 +87,7 @@ export default function Sidebar() {
             color: "#9ca3af",
           }}
         >
-          Management System
+          Sistem Informasi
         </p>
       </div>
 
