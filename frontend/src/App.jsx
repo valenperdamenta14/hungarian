@@ -21,31 +21,34 @@ function App() {
     location.pathname !== "/login";
 
   return (
-    <div className="flex min-h-screen bg-slate-100">
+    <div className="min-h-screen bg-slate-100">
       {showSidebar && <Sidebar />}
 
       <div
-        className={`flex-1 ${
+        className={`${
           showSidebar ? "ml-[270px]" : ""
         }`}
       >
         {showSidebar && <Navbar />}
 
-        <div className={showSidebar ? "p-5" : ""}>
+        <div
+          className={
+            showSidebar
+              ? "p-5 pt-20"
+              : ""
+          }
+        >
           <Routes>
-            {/* Landing Page */}
             <Route
               path="/"
               element={<LandingPage />}
             />
 
-            {/* Login */}
             <Route
               path="/login"
               element={<Login />}
             />
 
-            {/* Dashboard */}
             <Route
               path="/dashboard"
               element={
@@ -55,7 +58,6 @@ function App() {
               }
             />
 
-            {/* Perawat */}
             <Route
               path="/perawat"
               element={
@@ -65,7 +67,6 @@ function App() {
               }
             />
 
-            {/* Shift */}
             <Route
               path="/shift"
               element={
@@ -75,7 +76,6 @@ function App() {
               }
             />
 
-            {/* Histori */}
             <Route
               path="/histori"
               element={
@@ -85,7 +85,6 @@ function App() {
               }
             />
 
-            {/* Optimasi */}
             <Route
               path="/optimasi"
               element={
@@ -95,7 +94,6 @@ function App() {
               }
             />
 
-            {/* Manajemen User */}
             <Route
               path="/manajemen-user"
               element={

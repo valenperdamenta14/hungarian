@@ -59,9 +59,7 @@ exports.login = (req, res) => {
   });
 };
 
-// ==========================
-// GET ALL USER
-// ==========================
+
 exports.getUsers = (req, res) => {
   const sql = `
     SELECT
@@ -85,9 +83,7 @@ exports.getUsers = (req, res) => {
   });
 };
 
-// ==========================
-// TAMBAH USER
-// ==========================
+
 exports.createUser = async (req, res) => {
   const {
     nama,
@@ -134,9 +130,7 @@ exports.createUser = async (req, res) => {
   }
 };
 
-// ==========================
-// HAPUS USER
-// ==========================
+
 exports.deleteUser = (req, res) => {
   const { id } = req.params;
 

@@ -1,6 +1,6 @@
 const db = require("../config/db");
 
-// GET ALL
+
 exports.getShift = (req, res) => {
   const sql = `
     SELECT *
@@ -17,7 +17,7 @@ exports.getShift = (req, res) => {
   });
 };
 
-// POST
+
 exports.tambahShift = (req, res) => {
   const {
     kode_shift,
@@ -54,7 +54,7 @@ exports.tambahShift = (req, res) => {
   );
 };
 
-// UPDATE
+
 exports.updateShift = (req, res) => {
   const { kode } = req.params;
 
@@ -90,7 +90,7 @@ exports.updateShift = (req, res) => {
   );
 };
 
-// DELETE
+
 exports.deleteShift = (req, res) => {
   const { kode } = req.params;
 

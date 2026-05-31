@@ -12,7 +12,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className="h-16 bg-white border-b flex items-center justify-end px-6">
+    <div className="fixed top-0 left-[270px] right-0 h-16 bg-white border-b shadow-sm z-40 flex items-center justify-end px-6">
       <button
         onClick={handleLogout}
         className="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-red-50 text-red-600 transition"

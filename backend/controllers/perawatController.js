@@ -1,6 +1,6 @@
 const db = require("../config/db");
 
-// GET
+
 exports.getPerawat = (req, res) => {
   const sql = `
     SELECT *
@@ -17,7 +17,7 @@ exports.getPerawat = (req, res) => {
   });
 };
 
-// POST
+
 exports.tambahPerawat = (req, res) => {
   const {
     kode_perawat,
@@ -57,7 +57,7 @@ exports.tambahPerawat = (req, res) => {
   );
 };
 
-// PUT
+
 exports.updatePerawat = (req, res) => {
   const { kode } = req.params;
 
@@ -96,7 +96,7 @@ exports.updatePerawat = (req, res) => {
   );
 };
 
-// DELETE
+
 exports.deletePerawat = (req, res) => {
   const { kode } = req.params;
 

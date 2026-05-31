@@ -9,7 +9,7 @@ exports.prosesOptimasi = async (
 
   try {
 
-    // ambil dari body atau query
+    
     const hari =
       req.body?.hari ||
       req.query?.hari;

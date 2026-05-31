@@ -51,30 +51,24 @@ export default function TambahPerawat({
         onClick={(e) =>
           e.stopPropagation()
         }
-      >
+        >
         <div className="flex justify-between items-center border-b pb-4 mb-5">
-
-        <div className="flex items-center gap-3">
-
-            <div className="bg-blue-100 p-2 rounded-xl">
-            <UserPlus
-                className="text-blue-600"
-                size={22}
-            />
-            </div>
-
-            <div>
-            <h2 className="font-bold text-xl">
-                Tambah Perawat
-            </h2>
-            </div>
-
-        </div>
-
-        <button onClick={onClose}>
-            <X />
-        </button>
-
+          <div className="flex items-center gap-3">
+              <div className="bg-blue-100 p-2 rounded-xl">
+              <UserPlus
+                  className="text-blue-600"
+                  size={22}
+              />
+              </div>
+              <div>
+                <h2 className="font-bold text-xl">
+                    Tambah Perawat
+                </h2>
+              </div>
+          </div>
+          <button onClick={onClose}>
+              <X />
+          </button>
         </div>
 
         <form

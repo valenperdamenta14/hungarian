@@ -1,8 +1,6 @@
 const db = require("../config/db");
 
-// ==========================
-// GET SEMUA JADWAL
-// ==========================
+
 
 exports.getJadwal = (req, res) => {
   const sql = `
@@ -29,9 +27,7 @@ exports.getJadwal = (req, res) => {
   });
 };
 
-// ==========================
-// JADWAL HARIAN
-// ==========================
+
 
 exports.getJadwalHarian = (req, res) => {
   const { tanggal } = req.query;
@@ -69,9 +65,7 @@ exports.getJadwalHarian = (req, res) => {
   });
 };
 
-// ==========================
-// JADWAL MINGGUAN
-// ==========================
+
 
 exports.getJadwalMingguan = (req, res) => {
   const { start, end } = req.query;
@@ -109,9 +103,7 @@ exports.getJadwalMingguan = (req, res) => {
   });
 };
 
-// ==========================
-// JADWAL BULANAN
-// ==========================
+
 
 exports.getJadwalBulanan = (req, res) => {
   const { bulan, tahun } = req.query;
@@ -150,9 +142,7 @@ exports.getJadwalBulanan = (req, res) => {
   });
 };
 
-// ==========================
-// SUMMARY SHIFT
-// ==========================
+
 
 exports.getSummary = (req, res) => {
   const sql = `
@@ -177,9 +167,7 @@ exports.getSummary = (req, res) => {
   });
 };
 
-// ==========================
-// REKAP BULANAN
-// ==========================
+
 
 exports.getRekapBulanan = (req, res) => {
 

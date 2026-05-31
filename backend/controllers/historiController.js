@@ -1,6 +1,6 @@
 const db = require("../config/db");
 
-// GET ALL
+
 exports.getHistori = (req, res) => {
   const sql = `
     SELECT
@@ -21,7 +21,7 @@ exports.getHistori = (req, res) => {
   });
 };
 
-// GET DETAIL
+
 exports.getHistoriById = (req, res) => {
   const { kode } = req.params;
 
@@ -40,7 +40,7 @@ exports.getHistoriById = (req, res) => {
   });
 };
 
-// UPDATE
+
 exports.updateHistori = (req, res) => {
   const { kode } = req.params;
 

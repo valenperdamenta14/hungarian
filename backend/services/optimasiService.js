@@ -6,50 +6,25 @@ const {
 } = require("../algorithms/hungarian");
 
 const jalankanOptimasi = (hari) => {
-
   return new Promise((resolve, reject) => {
-
-    // =====================
-    // VALIDASI HARI
-    // =====================
-
     if (hari < 1 || hari > 31) {
-
       return reject(
         new Error(
           "Hari harus antara 1 - 31"
         )
       );
-
     }
-
-    // =====================
-    // FORMAT TANGGAL
-    // =====================
 
     const tanggal =
       `2025-12-${String(hari).padStart(2, "0")}`;
 
-    // =====================
-    // KOLOM HISTORI
-    // =====================
-
     let kolomHistori = null;
-
     if (hari > 1) {
-
       kolomHistori =
         `d${String(hari - 1).padStart(2, "0")}`;
-
     }
 
-    // =====================
-    // QUERY PERAWAT
-    // =====================
-
     let sqlPerawat = "";
-
-    // HARI PERTAMA
     if (hari === 1) {
 
       sqlPerawat = `
@@ -63,9 +38,7 @@ const jalankanOptimasi = (hari) => {
 
     }
 
-    // HARI 2+
     else {
-
       sqlPerawat = `
         SELECT
           p.kode_perawat,
@@ -76,20 +49,14 @@ const jalankanOptimasi = (hari) => {
           ON h.kode_perawat = p.kode_perawat
         ORDER BY p.kode_perawat
       `;
-
     }
 
     db.query(
       sqlPerawat,
       (err, perawat) => {
-
         if (err) {
           return reject(err);
         }
-
-        // =====================
-        // AMBIL SHIFT
-        // =====================
 
         db.query(
           `
@@ -103,73 +70,47 @@ const jalankanOptimasi = (hari) => {
               return reject(err2);
             }
 
-            // =====================
-            // SLOT SHIFT
-            // =====================
-
             const slotShift = [];
-
             shift.forEach((s) => {
-
               for (
                 let i = 0;
                 i < s.jumlah_shift;
                 i++
               ) {
-
                 slotShift.push({
                   kode_shift:
                     s.kode_shift,
-
                   nama_shift:
                     s.nama_shift,
                 });
-
               }
-
             });
 
-            // =====================
-            // MATRIX COST
-            // =====================
-
             const matrix = [];
-
             perawat.forEach((p) => {
-
               const row = [];
-
               slotShift.forEach((slot) => {
-
                 const cost = getCost(
                   p.shift_terakhir,
                   slot.nama_shift
                 );
 
                 row.push(cost);
-
               });
 
               matrix.push({
                 kode_perawat:
                   p.kode_perawat,
-
                 nama_perawat:
                   p.nama_perawat,
-
                 costs: row,
               });
-
             });
-
-            // =====================
-            // ASSIGNMENT
-            // =====================
 
             const assignment =
               findAssignment(matrix);
 
-            const hasil =
+              const hasil =
               assignment.map((item) => {
 
                 const slot =
@@ -183,28 +124,18 @@ const jalankanOptimasi = (hari) => {
                   );
 
                 return {
-
                   kode_perawat:
                     item.kode_perawat,
-
                   nama_perawat:
                     perawatData.nama_perawat,
-
                   kode_shift:
                     slot.kode_shift,
-
                   nama_shift:
                     slot.nama_shift,
-
                   cost:
                     item.cost,
                 };
-
               });
-
-            // =====================
-            // TOTAL COST
-            // =====================
 
             const totalCost =
               hasil.reduce(
@@ -212,10 +143,6 @@ const jalankanOptimasi = (hari) => {
                   sum + item.cost,
                 0
               );
-
-            // =========================
-            // HAPUS JADWAL LAMA
-            // =========================
 
             const deleteSql = `
               DELETE FROM jadwal
@@ -230,10 +157,6 @@ const jalankanOptimasi = (hari) => {
                 if (deleteErr) {
                   return reject(deleteErr);
                 }
-
-                // =====================
-                // SIMPAN JADWAL BARU
-                // =====================
 
                 hasil.forEach((item) => {
 
@@ -255,12 +178,7 @@ const jalankanOptimasi = (hari) => {
                       item.cost,
                     ]
                   );
-
                 });
-
-                // =====================
-                // RESPONSE
-                // =====================
 
                 resolve({
                   hari,
@@ -268,18 +186,13 @@ const jalankanOptimasi = (hari) => {
                   totalCost,
                   hasil,
                 });
-
               }
             );
-
           }
         );
-
       }
     );
-
   });
-
 };
 
 module.exports = {
