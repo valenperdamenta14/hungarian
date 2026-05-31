@@ -5,12 +5,13 @@ import {
   CalendarDays,
   History,
   Sparkles,
+  UserCog,
 } from "lucide-react";
 
 const menus = [
   {
     name: "Dashboard",
-    path: "/",
+    path: "/dashboard",
     icon: <LayoutDashboard size={20} />,
   },
   {
@@ -32,6 +33,11 @@ const menus = [
     name: "Proses Optimasi",
     path: "/optimasi",
     icon: <Sparkles size={20} />,
+  },
+  {
+    name: "Manajemen User",
+    path: "/manajemen-user",
+    icon: <UserCog size={20} />,
   },
 ];
 

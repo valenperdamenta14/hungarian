@@ -1,151 +1,113 @@
+import { useEffect, useState } from "react";
+import api from "../api/api";
+
 import {
   Users,
   CalendarCheck,
   Activity,
   ClipboardList,
-  ArrowUpRight,
+  Stethoscope,
 } from "lucide-react";
 
-const cards = [
-  {
-    title: "Total Perawat",
-    value: "24",
-    icon: <Users size={28} />,
-    color: "#2563eb",
-  },
-  {
-    title: "Total Shift",
-    value: "3",
-    icon: <CalendarCheck size={28} />,
-    color: "#10b981",
-  },
-  {
-    title: "Proses Optimasi",
-    value: "12",
-    icon: <Activity size={28} />,
-    color: "#f59e0b",
-  },
-  {
-    title: "Histori Jadwal",
-    value: "120",
-    icon: <ClipboardList size={28} />,
-    color: "#8b5cf6",
-  },
-];
-
 export default function Dashboard() {
+  const [stats, setStats] = useState({
+    totalPerawat: 0,
+    totalShift: 0,
+    totalHistori: 0,
+    totalUser: 0,
+  });
+
+  const loadDashboard = async () => {
+    try {
+      const res = await api.get(
+        "/dashboard"
+      );
+
+      setStats(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    loadDashboard();
+  }, []);
+
+  const cards = [
+    {
+      title: "Total Perawat",
+      value: stats.totalPerawat,
+      icon: Users,
+      color: "text-blue-600",
+      bg: "bg-blue-100",
+    },
+    {
+      title: "Total Shift",
+      value: stats.totalShift,
+      icon: CalendarCheck,
+      color: "text-green-600",
+      bg: "bg-green-100",
+    },
+    {
+      title: "Total User",
+      value: stats.totalUser,
+      icon: Activity,
+      color: "text-orange-600",
+      bg: "bg-orange-100",
+    },
+  ];
+
   return (
-    <div
-      style={{
-        padding: "30px",
-        background: "#f3f4f6",
-        minHeight: "100vh",
-      }}
-    >
-      {/* Header */}
-      <div
-        style={{
-          marginBottom: "30px",
-        }}
-      >
-        <h1
-          style={{
-            margin: 0,
-            fontSize: "34px",
-            fontWeight: "700",
-            color: "#111827",
-          }}
-        >
-          Dashboard
-        </h1>
-
-        <p
-          style={{
-            marginTop: "8px",
-            color: "#6b7280",
-            fontSize: "16px",
-          }}
-        >
-          Sistem Penjadwalan Perawat menggunakan Metode Hungarian
-        </p>
-      </div>
-
-      {/* Statistik Cards */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-          gap: "24px",
-          marginBottom: "35px",
-        }}
-      >
-        {cards.map((card, index) => (
-          <div
-            key={index}
-            style={{
-              background: "white",
-              borderRadius: "24px",
-              padding: "24px",
-              boxShadow: "0 10px 25px rgba(0,0,0,0.06)",
-              border: "1px solid rgba(0,0,0,0.04)",
-              transition: "0.3s",
-              cursor: "pointer",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-6px)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0px)";
-            }}
-          >
-            <div
-              style={{
-                width: "60px",
-                height: "60px",
-                borderRadius: "18px",
-                background: `${card.color}15`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: card.color,
-                marginBottom: "18px",
-              }}
-            >
-              {card.icon}
-            </div>
-
-            <h3
-              style={{
-                margin: 0,
-                fontSize: "15px",
-                color: "#6b7280",
-                fontWeight: "500",
-              }}
-            >
-              {card.title}
-            </h3>
-
-            <h1
-              style={{
-                margin: "10px 0 0",
-                fontSize: "34px",
-                color: "#111827",
-              }}
-            >
-              {card.value}
-            </h1>
+    <div className="p-6 bg-slate-50 min-h-screen">
+      {/* Welcome */}
+      <div className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-3xl p-8 text-white shadow-lg mb-8">
+        <div className="flex items-center gap-4">
+          <div className="bg-white/20 p-4 rounded-2xl">
+            <Stethoscope size={40} />
           </div>
-        ))}
+
+          <div>
+            <h2 className="text-2xl font-bold">
+              Dashboard NurseShift
+            </h2>
+
+            <p className="text-blue-100 mt-1">
+              Sistem Penjadwalan Shift Perawat
+              Menggunakan Metode Hungarian
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* Main Content */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "2fr 1fr",
-          gap: "24px",
-        }}
-      >
+      {/* Statistik */}
+      <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+        {cards.map((card, index) => {
+          const Icon = card.icon;
+
+          return (
+            <div
+              key={index}
+              className="bg-white rounded-3xl p-6 shadow-sm border hover:shadow-lg transition"
+            >
+              <div
+                className={`${card.bg} w-14 h-14 rounded-2xl flex items-center justify-center`}
+              >
+                <Icon
+                  size={28}
+                  className={card.color}
+                />
+              </div>
+
+              <h3 className="text-slate-500 mt-4">
+                {card.title}
+              </h3>
+
+              <h1 className="text-3xl font-bold text-slate-800 mt-1">
+                {card.value}
+              </h1>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

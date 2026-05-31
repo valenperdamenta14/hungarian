@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 22, 2026 at 01:17 PM
+-- Generation Time: May 30, 2026 at 07:13 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -171,6 +171,28 @@ INSERT INTO `shift` (`kode_shift`, `nama_shift`, `jumlah_shift`) VALUES
 ('S3', 'Malam', 5),
 ('S4', 'Libur', 5);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `nama` varchar(100) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` enum('Admin','Kepala Ruangan') DEFAULT 'Admin',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `nama`, `username`, `password`, `role`, `created_at`) VALUES
+(1, 'Administrator', 'admin', '$2b$10$deGo9XPT/EEik9njHZp8sOvs/TrffASLt6Aqe51qqExZY5BUCoAyi', 'Admin', '2026-05-30 13:03:56');
+
 --
 -- Indexes for dumped tables
 --
@@ -203,6 +225,13 @@ ALTER TABLE `shift`
   ADD PRIMARY KEY (`kode_shift`);
 
 --
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -211,6 +240,12 @@ ALTER TABLE `shift`
 --
 ALTER TABLE `jadwal`
   MODIFY `id_jadwal` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables

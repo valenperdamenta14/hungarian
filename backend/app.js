@@ -7,6 +7,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/dashboard",require("./routes/dashboardRoutes"));
 app.use("/api/perawat", require("./routes/perawatRoutes"));
 app.use("/api/shift", require("./routes/shiftRoutes"));
 app.use("/api/histori", require("./routes/historiRoutes"));

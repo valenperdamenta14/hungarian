@@ -1,140 +1,26 @@
-import { Bell, Search, UserCircle2 } from "lucide-react";
+import { CircleUser, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+
+    navigate("/login");
+  };
+
   return (
-    <div
-      style={{
-        height: "80px",
-        background: "rgba(255,255,255,0.75)",
-        backdropFilter: "blur(14px)",
-        WebkitBackdropFilter: "blur(14px)",
-        borderBottom: "1px solid rgba(0,0,0,0.06)",
-        padding: "0 28px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        position: "sticky",
-        top: 0,
-        zIndex: 100,
-        boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
-      }}
-    >
-      {/* Left */}
-      <div>
-        <h2
-          style={{
-            margin: 0,
-            fontSize: "24px",
-            fontWeight: "700",
-            color: "#111827",
-            letterSpacing: "0.3px",
-          }}
-        >
-          Sistem Penjadwalan Perawat
-        </h2>
-
-        <p
-          style={{
-            margin: "4px 0 0",
-            fontSize: "14px",
-            color: "#6b7280",
-          }}
-        >
-          Optimasi Jadwal Menggunakan Metode Hungarian
-        </p>
-      </div>
-
-      {/* Right */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "18px",
-        }}
+    <div className="h-16 bg-white border-b flex items-center justify-end px-6">
+      <button
+        onClick={handleLogout}
+        className="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-red-50 text-red-600 transition"
       >
-        {/* Search */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            background: "#f3f4f6",
-            padding: "10px 16px",
-            borderRadius: "14px",
-            minWidth: "240px",
-          }}
-        >
-          <Search size={18} color="#6b7280" />
-
-          <input
-            type="text"
-            placeholder="Search..."
-            style={{
-              border: "none",
-              outline: "none",
-              background: "transparent",
-              width: "100%",
-              fontSize: "14px",
-              color: "#111827",
-            }}
-          />
-        </div>
-
-        {/* Notification */}
-        <div
-          style={{
-            width: "46px",
-            height: "46px",
-            borderRadius: "14px",
-            background: "#f3f4f6",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            transition: "0.3s",
-          }}
-        >
-          <Bell size={20} color="#374151" />
-        </div>
-
-        {/* Profile */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-            background: "#f9fafb",
-            padding: "8px 14px",
-            borderRadius: "16px",
-            border: "1px solid rgba(0,0,0,0.05)",
-            cursor: "pointer",
-          }}
-        >
-          <UserCircle2 size={40} color="#2563eb" />
-
-          <div>
-            <h4
-              style={{
-                margin: 0,
-                fontSize: "14px",
-                color: "#111827",
-              }}
-            >
-              Admin
-            </h4>
-
-            <p
-              style={{
-                margin: "2px 0 0",
-                fontSize: "12px",
-                color: "#6b7280",
-              }}
-            >
-              Administrator
-            </p>
-          </div>
-        </div>
-      </div>
+        <CircleUser size={20} />
+        <span>Logout</span>
+        <LogOut size={18} />
+      </button>
     </div>
   );
 }

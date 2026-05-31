@@ -4,130 +4,119 @@ import {
   CalendarDays,
   Search,
   ClipboardList,
+  History,
 } from "lucide-react";
+
+const DAYS = Array.from(
+  { length: 31 },
+  (_, i) => String(i + 1).padStart(2, "0")
+);
+
+const SHIFT_LEGEND = [
+  {
+    label: "Pagi",
+    code: "P",
+    className:
+      "bg-amber-100 text-amber-600",
+  },
+  {
+    label: "Sore",
+    code: "S",
+    className:
+      "bg-blue-100 text-blue-600",
+  },
+  {
+    label: "Malam",
+    code: "M",
+    className:
+      "bg-gray-200 text-gray-900",
+  },
+  {
+    label: "Libur",
+    code: "L",
+    className:
+      "bg-emerald-100 text-emerald-600",
+  },
+];
 
 export default function Histori() {
   const [data, setData] = useState([]);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] =
+    useState("");
 
   useEffect(() => {
     loadData();
   }, []);
 
   const loadData = async () => {
-    const res = await api.get("/histori");
-    setData(res.data);
+    try {
+      const res = await api.get(
+        "/histori"
+      );
+      setData(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const filteredData = data.filter((item) =>
-    item.nama_perawat
-      .toLowerCase()
-      .includes(search.toLowerCase())
+  const filteredData = data.filter(
+    (item) =>
+      item.nama_perawat
+        ?.toLowerCase()
+        .includes(search.toLowerCase())
   );
 
-  const getShiftStyle = (shift) => {
+  const getShiftClass = (
+    shift
+  ) => {
     switch (shift) {
       case "P":
-        return {
-          background: "#fef3c7",
-          color: "#d97706",
-        };
+        return "bg-amber-100 text-amber-600";
 
       case "S":
-        return {
-          background: "#dbeafe",
-          color: "#2563eb",
-        };
+        return "bg-blue-100 text-blue-600";
 
       case "M":
-        return {
-          background: "#e5e7eb",
-          color: "#111827",
-        };
+        return "bg-gray-200 text-gray-900";
 
       case "L":
-        return {
-          background: "#d1fae5",
-          color: "#059669",
-        };
+        return "bg-emerald-100 text-emerald-600";
 
       default:
-        return {
-          background: "#f3f4f6",
-          color: "#6b7280",
-        };
+        return "bg-slate-100 text-slate-500";
     }
   };
 
   return (
-    <div
-      style={{
-        padding: "30px",
-        background: "#f3f4f6",
-        minHeight: "100vh",
-      }}
-    >
+    <div className="p-8 bg-slate-100 min-h-screen">
       {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "28px",
-        }}
-      >
+      <div className="flex justify-between items-center mb-7">
         <div>
-          <h1
-            style={{
-              margin: 0,
-              fontSize: "32px",
-              color: "#111827",
-            }}
-          >
-            Histori Shift
-          </h1>
-
-          <p
-            style={{
-              marginTop: "6px",
-              color: "#6b7280",
-            }}
-          >
-            Data histori penjadwalan perawat bulan
-            Desember 2025
-          </p>
+          <div className="flex items-center gap-3 mb-2">          
+            <History
+                className="text-blue-600"
+                size={30}
+              />
+            <h1 className="text-3xl font-bold text-slate-900">
+              Histori Shift
+            </h1>            
+          </div>
+          <p className="mt-1.5 text-slate-500">
+            Data histori penjadwalan
+            perawat bulan Desember
+            2025
+          </p>          
         </div>
 
-        <div
-          style={{
-            background: "white",
-            padding: "14px 18px",
-            borderRadius: "18px",
-            boxShadow: "0 6px 18px rgba(0,0,0,0.06)",
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-          }}
-        >
-          <ClipboardList color="#2563eb" />
+        <div className="bg-white px-5 py-4 rounded-2xl shadow-sm border flex items-center gap-3">
+          <ClipboardList className="text-blue-600" />
 
           <div>
-            <h3
-              style={{
-                margin: 0,
-                color: "#111827",
-              }}
-            >
+            <h3 className="font-bold text-slate-900">
               {data.length}
             </h3>
 
-            <p
-              style={{
-                margin: 0,
-                fontSize: "13px",
-                color: "#6b7280",
-              }}
-            >
+            <p className="text-xs text-slate-500">
               Total Histori
             </p>
           </div>
@@ -135,155 +124,65 @@ export default function Histori() {
       </div>
 
       {/* Legend */}
-      <div
-        style={{
-          background: "white",
-          padding: "20px",
-          borderRadius: "22px",
-          marginBottom: "24px",
-          boxShadow: "0 10px 25px rgba(0,0,0,0.05)",
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "14px",
-          alignItems: "center",
-        }}
-      >
-        <h3
-          style={{
-            margin: 0,
-            marginRight: "10px",
-            color: "#111827",
-          }}
-        >
+      <div className="bg-white p-5 rounded-3xl shadow-sm border mb-6 flex flex-wrap gap-3 items-center">
+        <h3 className="font-semibold text-slate-900 mr-2">
           Keterangan:
         </h3>
 
-        {[
-          {
-            label: "Pagi",
-            code: "P",
-            color: "#fef3c7",
-            text: "#d97706",
-          },
-          {
-            label: "Sore",
-            code: "S",
-            color: "#dbeafe",
-            text: "#2563eb",
-          },
-          {
-            label: "Malam",
-            code: "M",
-            color: "#e5e7eb",
-            text: "#111827",
-          },
-          {
-            label: "Libur",
-            code: "L",
-            color: "#d1fae5",
-            text: "#059669",
-          },
-        ].map((item, index) => (
-          <div
-            key={index}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
-              padding: "10px 14px",
-              borderRadius: "14px",
-              background: item.color,
-              color: item.text,
-              fontWeight: "600",
-              fontSize: "14px",
-            }}
-          >
-            <CalendarDays size={16} />
-            {item.code} - {item.label}
-          </div>
-        ))}
+        {SHIFT_LEGEND.map(
+          (item, index) => (
+            <div
+              key={index}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold ${item.className}`}
+            >
+              <CalendarDays size={16} />
+              {item.code} -{" "}
+              {item.label}
+            </div>
+          )
+        )}
       </div>
 
       {/* Table Card */}
-      <div
-        style={{
-          background: "white",
-          borderRadius: "24px",
-          padding: "28px",
-          boxShadow: "0 10px 25px rgba(0,0,0,0.05)",
-        }}
-      >
+      <div className="bg-white rounded-3xl p-7 shadow-sm border">
         {/* Search */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            background: "#f3f4f6",
-            padding: "12px 16px",
-            borderRadius: "14px",
-            marginBottom: "24px",
-            maxWidth: "320px",
-          }}
-        >
-          <Search size={18} color="#6b7280" />
+        <div className="flex items-center bg-slate-100 px-4 py-3 rounded-xl mb-6 max-w-sm">
+          <Search
+            size={18}
+            className="text-slate-500"
+          />
 
           <input
             type="text"
             placeholder="Cari nama perawat..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            style={{
-              border: "none",
-              outline: "none",
-              background: "transparent",
-              marginLeft: "10px",
-              width: "100%",
-              fontSize: "14px",
-            }}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
+            className="ml-2.5 w-full bg-transparent outline-none text-sm"
           />
         </div>
 
         {/* Table */}
-        <div
-          style={{
-            overflowX: "auto",
-          }}
-        >
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              minWidth: "1500px",
-            }}
-          >
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[1500px] border-collapse">
             <thead>
-              <tr
-                style={{
-                  background: "#f9fafb",
-                }}
-              >
-                <th style={headStyle}>
+              <tr className="bg-slate-50">
+                <th className="px-4 py-4 text-left text-sm text-slate-700 whitespace-nowrap">
                   Kode
                 </th>
 
-                <th style={headStyle}>
+                <th className="px-4 py-4 text-left text-sm text-slate-700 whitespace-nowrap">
                   Nama
                 </th>
 
-                {Array.from(
-                  { length: 31 },
-                  (_, i) => (
+                {DAYS.map(
+                  (day, index) => (
                     <th
-                      key={i}
-                      style={{
-                        ...headStyle,
-                        textAlign: "center",
-                      }}
+                      key={index}
+                      className="px-3 py-4 text-center text-sm text-slate-700 whitespace-nowrap"
                     >
-                      {String(i + 1).padStart(
-                        2,
-                        "0"
-                      )}
+                      {day}
                     </th>
                   )
                 )}
@@ -291,88 +190,79 @@ export default function Histori() {
             </thead>
 
             <tbody>
-              {filteredData.map((row, index) => (
-                <tr
-                  key={row.kode_perawat}
-                  style={{
-                    borderBottom:
-                      index !==
-                      filteredData.length - 1
-                        ? "1px solid #f3f4f6"
-                        : "none",
-                  }}
-                >
-                  <td style={tableCell}>
-                    {row.kode_perawat}
-                  </td>
-
-                  <td
-                    style={{
-                      ...tableCell,
-                      fontWeight: "600",
-                      minWidth: "180px",
-                    }}
-                  >
-                    {row.nama_perawat}
-                  </td>
-
-                  {Array.from(
-                    { length: 31 },
-                    (_, i) => {
-                      const shift =
-                        row[
-                          `d${String(
-                            i + 1
-                          ).padStart(
-                            2,
-                            "0"
-                          )}`
-                        ];
-
-                      return (
-                        <td
-                          key={i}
-                          style={{
-                            padding: "14px 8px",
-                            textAlign: "center",
-                          }}
-                        >
-                          <span
-                            style={{
-                              display: "inline-flex",
-                              alignItems: "center",
-                              justifyContent:
-                                "center",
-                              width: "34px",
-                              height: "34px",
-                              borderRadius: "10px",
-                              fontWeight: "700",
-                              fontSize: "13px",
-                              ...getShiftStyle(
-                                shift
-                              ),
-                            }}
-                          >
-                            {shift}
-                          </span>
-                        </td>
-                      );
+              {filteredData.map(
+                (row, index) => (
+                  <tr
+                    key={
+                      row.kode_perawat
                     }
-                  )}
-                </tr>
-              ))}
+                    className={
+                      index !==
+                      filteredData.length -
+                        1
+                        ? "border-b border-slate-100"
+                        : ""
+                    }
+                  >
+                    <td className="px-4 py-4 text-sm text-slate-700 whitespace-nowrap">
+                      {
+                        row.kode_perawat
+                      }
+                    </td>
 
-              {filteredData.length === 0 && (
+                    <td className="px-4 py-4 text-sm font-semibold text-slate-700 whitespace-nowrap min-w-[180px]">
+                      {
+                        row.nama_perawat
+                      }
+                    </td>
+
+                    {DAYS.map(
+                      (
+                        _,
+                        dayIndex
+                      ) => {
+                        const shift =
+                          row[
+                            `d${String(
+                              dayIndex +
+                                1
+                            ).padStart(
+                              2,
+                              "0"
+                            )}`
+                          ];
+
+                        return (
+                          <td
+                            key={
+                              dayIndex
+                            }
+                            className="px-2 py-3 text-center"
+                          >
+                            <span
+                              className={`inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-bold ${getShiftClass(
+                                shift
+                              )}`}
+                            >
+                              {shift}
+                            </span>
+                          </td>
+                        );
+                      }
+                    )}
+                  </tr>
+                )
+              )}
+
+              {filteredData.length ===
+                0 && (
                 <tr>
                   <td
                     colSpan="33"
-                    style={{
-                      textAlign: "center",
-                      padding: "30px",
-                      color: "#9ca3af",
-                    }}
+                    className="text-center py-8 text-slate-400"
                   >
-                    Data histori tidak ditemukan
+                    Data histori
+                    tidak ditemukan
                   </td>
                 </tr>
               )}
@@ -383,18 +273,3 @@ export default function Histori() {
     </div>
   );
 }
-
-const headStyle = {
-  padding: "16px",
-  textAlign: "left",
-  color: "#374151",
-  fontSize: "14px",
-  whiteSpace: "nowrap",
-};
-
-const tableCell = {
-  padding: "16px",
-  color: "#374151",
-  fontSize: "14px",
-  whiteSpace: "nowrap",
-};
