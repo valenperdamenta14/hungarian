@@ -103,7 +103,7 @@ export default function Histori() {
           </div>
           <p className="mt-1.5 text-slate-500">
             Data histori penjadwalan
-            perawat bulan Desember
+            pegawai bulan Desember
             2025
           </p>          
         </div>
@@ -154,7 +154,7 @@ export default function Histori() {
 
           <input
             type="text"
-            placeholder="Cari nama perawat..."
+            placeholder="Cari nama pegawai..."
             value={search}
             onChange={(e) =>
               setSearch(e.target.value)

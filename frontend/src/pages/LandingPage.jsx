@@ -24,7 +24,7 @@ export default function LandingPage() {
                 NurseShift
               </h1>
               <p className="text-sm text-slate-500">
-                Sistem Penjadwalan Shift Perawat
+                Sistem Penjadwalan Shift Pegawai
               </p>
             </div>
           </div>
@@ -48,7 +48,7 @@ export default function LandingPage() {
             </span>
 
             <h1 className="text-5xl font-bold text-slate-800 mt-6 leading-tight">
-              Penjadwalan Shift Perawat
+              Penjadwalan Shift Pegawai
               <span className="text-blue-600">
                 {" "}
                 Menggunakan Metode Hungarian
@@ -56,7 +56,7 @@ export default function LandingPage() {
             </h1>
 
             <p className="mt-6 text-lg text-slate-600 leading-relaxed">
-              Membantu rumah sakit menentukan pembagian shift perawat
+              Membantu rumah sakit menentukan pembagian shift Pegawai
               secara optimal berdasarkan kebutuhan layanan, sehingga
               jadwal menjadi lebih efektif, efisien, dan adil.
             </p>
@@ -74,10 +74,10 @@ export default function LandingPage() {
                   <Users className="text-blue-600" size={40} />
                   <div>
                     <h4 className="font-semibold">
-                      Data Perawat
+                      Data Pegawai
                     </h4>
                     <p className="text-slate-500 text-sm">
-                      Mengelola seluruh data perawat yang akan digunakan dalam proses penjadwalan.
+                      Mengelola seluruh data pegawai yang akan digunakan dalam proses penjadwalan.
                     </p>
                   </div>
                 </div>
@@ -118,7 +118,7 @@ export default function LandingPage() {
       <footer className="bg-blue-700 text-white text-center py-6">
         <p>
           © 2026 NurseShift Optimizer | Sistem Penjadwalan Shift
-          Perawat
+          Pegawai
         </p>
       </footer>
     </div>

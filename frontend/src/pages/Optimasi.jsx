@@ -96,7 +96,7 @@ export default function Optimasi() {
         </div>
 
         <p className="mt-1.5 text-slate-500">
-          Generate penjadwalan perawat secara optimal
+          Generate penjadwalan pegawai secara optimal
           menggunakan algoritma Hungarian
         </p>
       </div>

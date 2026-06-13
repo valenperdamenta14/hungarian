@@ -60,7 +60,7 @@ export default function Shift() {
           </div>
 
           <p className="text-slate-500">
-            Kelola data shift perawat
+            Kelola data shift pegawai
           </p>
         </div>
 

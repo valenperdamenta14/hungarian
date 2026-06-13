@@ -56,12 +56,12 @@ export default function Perawat() {
             />
 
             <h1 className="text-3xl font-bold text-slate-800">
-              Data Perawat
+              Data Pegawai
             </h1>
           </div>
 
           <p className="text-slate-500">
-            Kelola data perawat rumah sakit
+            Kelola data pegawai rumah sakit
           </p>
         </div>
 

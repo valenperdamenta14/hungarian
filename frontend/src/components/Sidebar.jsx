@@ -15,7 +15,7 @@ const menus = [
     icon: <LayoutDashboard size={20} />,
   },
   {
-    name: "Data Perawat",
+    name: "Data Pegawai",
     path: "/perawat",
     icon: <Users size={20} />,
   },

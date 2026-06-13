@@ -35,7 +35,7 @@ export default function Dashboard() {
 
   const cards = [
     {
-      title: "Total Perawat",
+      title: "Total Pegawai",
       value: stats.totalPerawat,
       icon: Users,
       color: "text-blue-600",
@@ -72,7 +72,7 @@ export default function Dashboard() {
             </h2>
 
             <p className="text-blue-100 mt-1">
-              Sistem Penjadwalan Shift Perawat
+              Sistem Penjadwalan Shift Pegawai
               Menggunakan Metode Hungarian
             </p>
           </div>
