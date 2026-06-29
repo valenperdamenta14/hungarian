@@ -82,7 +82,7 @@ export default function Perawat() {
               </h3>
 
               <p className="text-sm text-slate-500">
-                Total Perawat
+                Total Pegawai
               </p>
             </div>
 
@@ -95,7 +95,7 @@ export default function Perawat() {
             className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl flex items-center gap-2 shadow"
           >
             <UserPlus size={18} />
-            Tambah Perawat
+            Tambah Pegawai
           </button>
 
         </div>

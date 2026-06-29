@@ -51,7 +51,7 @@ export default function LandingPage() {
               Penjadwalan Shift Pegawai
               <span className="text-blue-600">
                 {" "}
-                Menggunakan Metode Hungarian
+                Menggunakan Algoritma Hungarian
               </span>
             </h1>
 
@@ -117,7 +117,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="bg-blue-700 text-white text-center py-6">
         <p>
-          © 2026 NurseShift Optimizer | Sistem Penjadwalan Shift
+          © 2026 NurseShift | Sistem Penjadwalan Shift
           Pegawai
         </p>
       </footer>

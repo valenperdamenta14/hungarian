@@ -3,23 +3,30 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   Stethoscope,
   User,
-  Lock,
-  Eye,
-  EyeOff,
+ Lock,
+ Eye,
+ EyeOff,
+ UserRound,
 } from "lucide-react";
 
 import api from "../api/api";
 
-export default function Login() {
+export default function Register() {
   const navigate = useNavigate();
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] =
+    useState(false);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] =
+    useState(false);
 
   const [error, setError] = useState("");
 
+  const [success, setSuccess] =
+    useState("");
+
   const [form, setForm] = useState({
+    nama: "",
     username: "",
     password: "",
   });
@@ -33,11 +40,22 @@ export default function Login() {
     setError("");
   };
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
-    if (!form.username || !form.password) {
-      setError("Username dan password wajib diisi");
+    if (
+      !form.nama ||
+      !form.username ||
+      !form.password
+    ) {
+      setError("Semua field wajib diisi");
+      return;
+    }
+
+    if (form.password.length < 6) {
+      setError(
+        "Password minimal 6 karakter"
+      );
       return;
     }
 
@@ -45,26 +63,22 @@ export default function Login() {
       setLoading(true);
       setError("");
 
-      const res = await api.post("/auth/login", {
-        username: form.username,
-        password: form.password,
+      await api.post("/auth/register", {
+        ...form,
+        role: "admin",
       });
 
-      localStorage.setItem(
-        "token",
-        res.data.token
+      setSuccess(
+        "Registrasi berhasil, silakan login."
       );
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify(res.data.user)
-      );
-
-      navigate("/dashboard");
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
     } catch (err) {
       setError(
         err.response?.data?.message ||
-          "Login gagal, silakan coba lagi"
+          "Registrasi gagal"
       );
     } finally {
       setLoading(false);
@@ -74,7 +88,7 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-blue-50 flex items-center justify-center p-6">
       <div className="w-full max-w-md bg-white rounded-3xl shadow-xl p-8">
-        {/* Logo */}
+
         <div className="flex justify-center mb-6">
           <div className="bg-blue-600 p-4 rounded-2xl">
             <Stethoscope
@@ -89,21 +103,51 @@ export default function Login() {
         </h1>
 
         <p className="text-center text-slate-500 mt-2">
-          Login ke Sistem Penjadwalan Shift Pegawai
+          Registrasi Akun
         </p>
 
-        {/* Error */}
         {error && (
           <div className="mt-5 bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded-xl">
             {error}
           </div>
         )}
 
+        {success && (
+          <div className="mt-5 bg-green-100 border border-green-300 text-green-700 px-4 py-3 rounded-xl">
+            {success}
+          </div>
+        )}
+
         <form
-          onSubmit={handleLogin}
+          onSubmit={handleRegister}
           className="mt-6 space-y-5"
         >
+          {/* Nama */}
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Nama Lengkap
+            </label>
+
+            <div className="relative">
+              <UserRound
+                size={18}
+                className="absolute left-3 top-3.5 text-slate-400"
+              />
+
+              <input
+                type="text"
+                name="nama"
+                value={form.nama}
+                onChange={handleChange}
+                placeholder="Masukkan nama"
+                className="w-full border rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
           {/* Username */}
+
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">
               Username
@@ -127,6 +171,7 @@ export default function Login() {
           </div>
 
           {/* Password */}
+
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">
               Password
@@ -154,7 +199,9 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() =>
-                  setShowPassword(!showPassword)
+                  setShowPassword(
+                    !showPassword
+                  )
                 }
                 className="absolute right-3 top-3 text-slate-500"
               >
@@ -167,7 +214,6 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Tombol Login */}
           <button
             type="submit"
             disabled={loading}
@@ -179,27 +225,17 @@ export default function Login() {
           >
             {loading
               ? "Memproses..."
-              : "Login"}
+              : "Daftar"}
           </button>
         </form>
 
         <div className="text-center mt-6">
-          Belum punya akun?{" "}
+          Sudah punya akun?{" "}
           <Link
-            to="/register"
+            to="/login"
             className="text-blue-600 hover:underline"
           >
-            Register
-          </Link>
-        </div>        
-        
-        {/* Kembali */}
-        <div className="text-center mt-6">
-          <Link
-            to="/"
-            className="text-blue-600 hover:underline"
-          >
-            ← Kembali ke Landing Page
+            Login
           </Link>
         </div>
       </div>

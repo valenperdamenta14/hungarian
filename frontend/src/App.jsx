@@ -6,6 +6,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Perawat from "./pages/Perawat";
 import Shift from "./pages/Shift";
@@ -18,7 +19,8 @@ function App() {
 
   const showSidebar =
     location.pathname !== "/" &&
-    location.pathname !== "/login";
+    location.pathname !== "/login" &&
+    location.pathname !== "/register";
 
   return (
     <div className="min-h-screen bg-slate-100">
@@ -47,6 +49,11 @@ function App() {
             <Route
               path="/login"
               element={<Login />}
+            />
+            
+            <Route
+              path="/register"
+              element={<Register />}
             />
 
             <Route
