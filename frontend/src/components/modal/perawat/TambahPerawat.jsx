@@ -112,16 +112,22 @@ export default function TambahPerawat({
             </div>
 
             <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Jabatan
-                </label>
-                <input
-                    name="jabatan"
-                    placeholder="Jabatan"
-                    onChange={handleChange}
-                    className="w-full border p-3 rounded-lg"
-                />
-            </div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Jabatan
+              </label>
+
+              <select
+                  name="jabatan"
+                  value={form.jabatan}
+                  onChange={handleChange}
+                  className="w-full border p-3 rounded-lg bg-white"
+                  required
+              >
+                  <option value="">-- Pilih Jabatan --</option>
+                  <option value="PJ SHIFT">PJ SHIFT</option>
+                  <option value="PP">PP</option>
+              </select>
+          </div>
             
           <button className="w-full bg-blue-600 text-white p-3 rounded-lg">
             Simpan

@@ -5,12 +5,24 @@ import {
   Search,
   ClipboardList,
   History,
+  FileDown,
 } from "lucide-react";
 
-const DAYS = Array.from(
-  { length: 31 },
-  (_, i) => String(i + 1).padStart(2, "0")
-);
+const BULAN = [
+  "",
+  "Januari",
+  "Februari",
+  "Maret",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Agustus",
+  "September",
+  "Oktober",
+  "November",
+  "Desember",
+];
 
 const SHIFT_LEGEND = [
   {
@@ -40,23 +52,64 @@ const SHIFT_LEGEND = [
 ];
 
 export default function Histori() {
+
   const [data, setData] = useState([]);
-  const [search, setSearch] =
-    useState("");
+  const [search, setSearch] = useState("");
+  const [periode, setPeriode] = useState([]);
+  const [bulan, setBulan] = useState("");
+  const [tahun, setTahun] = useState("");
+
+  // Jumlah hari sesuai bulan & tahun
+  const jumlahHari =
+    bulan && tahun
+      ? new Date(tahun, bulan, 0).getDate()
+      : 31;
+
+  // Membuat array tanggal
+  const DAYS = Array.from(
+    { length: jumlahHari },
+    (_, i) => String(i + 1).padStart(2, "0")
+  );
 
   useEffect(() => {
-    loadData();
+    loadPeriode();
   }, []);
+
+  useEffect(() => {
+    if (bulan && tahun) {
+      loadData();
+    }
+  }, [bulan, tahun]);
 
   const loadData = async () => {
     try {
       const res = await api.get(
-        "/histori"
+        `/histori?bulan=${bulan}&tahun=${tahun}`
       );
       setData(res.data);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
     }
+  };
+
+  const loadPeriode = async () => {
+    try {
+      const res = await api.get("/histori/periode");
+      setPeriode(res.data);
+      if (res.data.length > 0) {
+        setBulan(res.data[0].bulan);
+        setTahun(res.data[0].tahun);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const exportPDF = () => {
+    window.open(
+      `${api.defaults.baseURL}/histori/export?bulan=${bulan}&tahun=${tahun}`,
+      "_blank"
+    );
   };
 
   const filteredData = data.filter(
@@ -102,9 +155,10 @@ export default function Histori() {
             </h1>            
           </div>
           <p className="mt-1.5 text-slate-500">
-            Data histori penjadwalan
-            pegawai bulan Desember
-            2025
+            Data histori penjadwalan pegawai bulan{" "}
+            <span className="font-semibold">
+              {BULAN[bulan]} {tahun}
+            </span>
           </p>          
         </div>
 
@@ -145,6 +199,48 @@ export default function Histori() {
 
       {/* Table Card */}
       <div className="bg-white rounded-3xl p-7 shadow-sm border">
+
+        <div className="flex justify-between items-center mb-6">
+
+          <select
+            value={`${bulan}-${tahun}`}
+            onChange={(e) => {
+              const value = e.target.value.split("-");
+              setBulan(Number(value[0]));
+              setTahun(Number(value[1]));
+            }}
+            className="border rounded-xl px-4 py-3"
+          >
+            {periode.map((item, index) => (
+              <option
+                key={index}
+                value={`${item.bulan}-${item.tahun}`}
+              >
+                {BULAN[item.bulan]} {item.tahun}
+              </option>
+            ))}
+          </select>
+
+          <button
+            onClick={exportPDF}
+            className="
+              flex items-center gap-2
+              bg-red-600
+              hover:bg-red-700
+              text-white
+              px-5
+              py-3
+              rounded-xl
+              shadow
+              transition
+            "
+          >
+            <FileDown size={18} />
+
+            Export PDF
+          </button>
+
+        </div>
         {/* Search */}
         <div className="flex items-center bg-slate-100 px-4 py-3 rounded-xl mb-6 max-w-sm">
           <Search
