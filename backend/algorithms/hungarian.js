@@ -1,49 +1,48 @@
-function getCost(shiftAwal, shiftTujuan) {
+const { Munkres } = require("munkres-js");
+const munkres = new Munkres();
 
+function getCost(shiftAwal, shiftBaru) {
   if (
-    (shiftAwal === "P" && shiftTujuan === "Pagi") ||
-    (shiftAwal === "S" && shiftTujuan === "Sore") ||
-    (shiftAwal === "M" && shiftTujuan === "Malam") ||
-    (shiftAwal === "L" && shiftTujuan === "Libur")
+    (shiftAwal === "P" && shiftBaru === "Pagi") ||
+    (shiftAwal === "S" && shiftBaru === "Sore") ||
+    (shiftAwal === "M" && shiftBaru === "Malam") ||
+    (shiftAwal === "L" && shiftBaru === "Libur")
   ) {
     return 1;
+  }
+
+  if (
+    shiftAwal === "M" &&
+    shiftBaru === "Pagi"
+  ) {
+    return 100;
+  }
+
+  if (
+    shiftAwal === "P" &&
+    shiftBaru === "Malam"
+  ) {
+    return 40;
+  }
+
+  if (
+    shiftAwal === "S" &&
+    shiftBaru === "Pagi"
+  ) {
+    return 20;
   }
 
   return 5;
 }
 
 function findAssignment(matrix) {
-
-  let usedCols = [];
-  let hasil = [];
-
-  matrix.forEach((row) => {
-
-    let minCost = Infinity;
-    let selectedCol = -1;
-
-    row.costs.forEach((cost, index) => {
-
-      if (
-        !usedCols.includes(index) &&
-        cost < minCost
-      ) {
-        minCost = cost;
-        selectedCol = index;
-      }
-
-    });
-
-    usedCols.push(selectedCol);
-
-    hasil.push({
-      kode_perawat: row.kode_perawat,
-      colIndex: selectedCol,
-      cost: minCost,
-    });
-
-  });
-
+  const costMatrix = matrix.map((r) => r.costs);
+  const indexes = munkres.compute(costMatrix);
+  const hasil = indexes.map(([row, col]) => ({
+    kode_perawat: matrix[row].kode_perawat,
+    colIndex: col,
+    cost: costMatrix[row][col],
+  }));
   return hasil;
 }
 

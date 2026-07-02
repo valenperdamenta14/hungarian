@@ -1,23 +1,23 @@
 const {
   jalankanOptimasi,
+  simpanHistori,
 } = require("../services/optimasiService");
 
-exports.prosesOptimasi = async (
-  req,
-  res
-) => {
-
+exports.prosesOptimasi = async (req, res) => {
   try {
 
-    
-    const hari =
-      req.body?.hari ||
-      req.query?.hari;
+    const bulan = parseInt(req.body.bulan);
+    const tahun = parseInt(req.body.tahun);
 
-    const hasil =
-      await jalankanOptimasi(
-        parseInt(hari)
-      );
+    const hasil = await jalankanOptimasi({
+      bulan,
+      tahun,
+    });
+
+    await simpanHistori({
+      bulan,
+      tahun,
+    });
 
     res.json(hasil);
 
@@ -28,5 +28,4 @@ exports.prosesOptimasi = async (
     });
 
   }
-
 };
