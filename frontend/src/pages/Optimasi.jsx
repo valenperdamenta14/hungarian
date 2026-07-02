@@ -10,29 +10,33 @@ import {
 } from "lucide-react";
 
 export default function Optimasi() {
-  const [hari, setHari] = useState("");
+  const [bulan, setBulan] = useState(1);
+  const [tahun, setTahun] = useState(new Date().getFullYear());
   const [hasil, setHasil] = useState([]);
   const [totalCost, setTotalCost] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const generateOptimasi = async () => {
-    if (!hari) {
-      alert("Masukkan hari terlebih dahulu");
+    if(!bulan || !tahun){
+        alert("Pilih periode");
       return;
     }
 
     try {
       setLoading(true);
-
-      const res = await api.post("/optimasi", {
-        hari: parseInt(hari),
+      const res = await api.post("/optimasi",{
+        bulan,
+        tahun
       });
 
       setHasil(res.data.hasil);
       setTotalCost(res.data.totalCost);
     } catch (err) {
       console.log(err);
-      alert("Gagal generate optimasi");
+      alert(
+        err.response?.data?.message ||
+        "Gagal generate optimasi"
+      );
     } finally {
       setLoading(false);
     }
@@ -42,16 +46,12 @@ export default function Optimasi() {
     switch (shift) {
       case "Pagi":
         return "bg-amber-100 text-amber-600";
-
       case "Sore":
         return "bg-blue-100 text-blue-600";
-
       case "Malam":
         return "bg-gray-200 text-gray-900";
-
       case "Libur":
         return "bg-emerald-100 text-emerald-600";
-
       default:
         return "bg-slate-100 text-slate-500";
     }
@@ -59,8 +59,8 @@ export default function Optimasi() {
 
   const cards = [
     {
-      title: "Hari Dipilih",
-      value: hari || "-",
+      title: "Periode",
+      value: `${bulan}/${tahun}`,
       icon: CalendarDays,
       bg: "bg-blue-100",
       color: "text-blue-600",
@@ -143,17 +143,39 @@ export default function Optimasi() {
         </h2>
 
         <div className="flex flex-wrap gap-4 items-center">
-          <input
-            type="number"
-            min="1"
-            max="31"
-            placeholder="Masukkan Hari"
-            value={hari}
-            onChange={(e) =>
-              setHari(e.target.value)
-            }
-            className="w-56 px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div className="flex gap-3">
+
+            <select
+              value={bulan}
+              onChange={(e)=>setBulan(Number(e.target.value))}
+              className="px-4 py-3 rounded-xl border"
+              >
+              <option value={1}>Januari</option>
+              <option value={2}>Februari</option>
+              <option value={3}>Maret</option>
+              <option value={4}>April</option>
+              <option value={5}>Mei</option>
+              <option value={6}>Juni</option>
+              <option value={7}>Juli</option>
+              <option value={8}>Agustus</option>
+              <option value={9}>September</option>
+              <option value={10}>Oktober</option>
+              <option value={11}>November</option>
+              <option value={12}>Desember</option>
+            </select>
+
+            <select
+              value={tahun}
+              onChange={(e)=>setTahun(Number(e.target.value))}
+              className="px-4 py-3 rounded-xl border"
+              >
+              <option value={2025}>2025</option>
+              <option value={2026}>2026</option>
+              <option value={2027}>2027</option>
+              <option value={2028}>2028</option>
+              <option value={2029}>2029</option>
+            </select>
+          </div>
 
           <button
             onClick={generateOptimasi}

@@ -1,31 +1,19 @@
-/*
-===========================================
-SHIFT HELPER
-===========================================
-*/
+function createShiftSlots(shift) {
+  const slots = [];
 
-const createShiftSlots = (shiftData) => {
-  const slotShift = [];
-  shiftData.forEach((shift) => {
-    for (let i = 0; i < shift.jumlah_shift; i++) {
-      slotShift.push({
-        kode_shift: shift.kode_shift,
-        nama_shift: shift.nama_shift,
+  shift.forEach((item) => {
+    for (let i = 0; i < item.jumlah_shift; i++) {
+      slots.push({
+        kode_shift: item.kode_shift,
+        nama_shift: item.nama_shift,
       });
     }
   });
 
-  return slotShift;
-};
+  return slots;
+}
 
-/*
-===========================================
-MENGUBAH NAMA SHIFT
-Pagi -> P
-===========================================
-*/
-
-const getShiftCode = (namaShift) => {
+function getShiftCode(namaShift) {
   switch (namaShift) {
     case "Pagi":
       return "P";
@@ -36,19 +24,11 @@ const getShiftCode = (namaShift) => {
     case "Libur":
       return "L";
     default:
-      return null;
+      return "L";
   }
+}
 
-};
-
-/*
-===========================================
-MENGUBAH KODE SHIFT
-P -> Pagi
-===========================================
-*/
-
-const getShiftName = (kodeShift) => {
+function getShiftName(kodeShift) {
   switch (kodeShift) {
     case "P":
       return "Pagi";
@@ -59,9 +39,9 @@ const getShiftName = (kodeShift) => {
     case "L":
       return "Libur";
     default:
-      return null;
+      return "Libur";
   }
-};
+}
 
 module.exports = {
   createShiftSlots,

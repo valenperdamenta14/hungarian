@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 02, 2026 at 04:23 AM
+-- Generation Time: Jul 02, 2026 at 09:12 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -259,7 +259,6 @@ CREATE TABLE `perawat` (
 INSERT INTO `perawat` (`kode_perawat`, `nama_perawat`, `grup`, `jabatan`) VALUES
 ('P01', 'Gusesta Jeli, AMK.', 'A', 'PJ SHIFT'),
 ('P02', 'Natalita Amk', 'A', 'PJ SHIFT'),
-('P025', 'BIAWAK', 'A', 'Kepala Ruangan'),
 ('P03', 'Agnes Nelsy H. Tampubolon, Amk', 'A', 'PJ SHIFT'),
 ('P04', 'Wana Delima Malau, AMK.', 'A', 'PJ SHIFT'),
 ('P05', 'Ferdycha Ginting S.Kep. Ns', 'A', 'PJ SHIFT'),
@@ -281,8 +280,7 @@ INSERT INTO `perawat` (`kode_perawat`, `nama_perawat`, `grup`, `jabatan`) VALUES
 ('P21', 'Elvira, S.Kep, Ns', 'D', 'PP'),
 ('P22', 'Nur Cahyani Ndraha, Amd.', 'D', 'PP'),
 ('P23', 'Angga Pradana, AMK.', 'D', 'PP'),
-('P24', 'Ropina, AMK', 'D', 'PP'),
-('P25', 'TES', 'A', 'PJ SHIFT');
+('P24', 'Ropina, AMK', 'D', 'PP');
 
 -- --------------------------------------------------------
 

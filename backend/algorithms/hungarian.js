@@ -1,53 +1,54 @@
-function getCost(shiftAwal, shiftTujuan) {
+const { Munkres } = require("munkres-js");
 
-  if (
-    (shiftAwal === "P" && shiftTujuan === "Pagi") ||
-    (shiftAwal === "S" && shiftTujuan === "Sore") ||
-    (shiftAwal === "M" && shiftTujuan === "Malam") ||
-    (shiftAwal === "L" && shiftTujuan === "Libur")
-  ) {
-    return 1;
-  }
-
-  return 5;
-}
+const munkres = new Munkres();
 
 function findAssignment(matrix) {
 
-  let usedCols = [];
-  let hasil = [];
+  if (!matrix || matrix.length === 0) {
+    return [];
+  }
 
-  matrix.forEach((row) => {
+  const costMatrix = matrix.map(
+    (row) => row.costs
+  );
 
-    let minCost = Infinity;
-    let selectedCol = -1;
+  const indexes =
+    munkres.compute(costMatrix);
 
-    row.costs.forEach((cost, index) => {
+  const hasil = indexes.map(
+    ([row, col]) => {
 
-      if (
-        !usedCols.includes(index) &&
-        cost < minCost
-      ) {
-        minCost = cost;
-        selectedCol = index;
-      }
+      return {
 
-    });
+        kode_perawat:
+          matrix[row].kode_perawat,
 
-    usedCols.push(selectedCol);
+        nama_perawat:
+          matrix[row].nama_perawat,
 
-    hasil.push({
-      kode_perawat: row.kode_perawat,
-      colIndex: selectedCol,
-      cost: minCost,
-    });
+        colIndex:
+          col,
 
-  });
+        cost:
+          costMatrix[row][col],
+
+      };
+
+    }
+  );
+
+  hasil.sort((a, b) =>
+    a.kode_perawat.localeCompare(
+      b.kode_perawat
+    )
+  );
 
   return hasil;
+
 }
 
 module.exports = {
-  getCost,
+
   findAssignment,
+
 };
